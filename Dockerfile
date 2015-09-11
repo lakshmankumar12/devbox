@@ -14,6 +14,8 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y tcpdump
 RUN apt-get install -y tmux
 RUN apt-get install -y curl
+RUN apt-get install -y cscope
+RUN apt-get install -y ctags
 
 RUN useradd lnara002
 RUN mkdir /home/lnara002 && chown -R lnara002: /home/lnara002
