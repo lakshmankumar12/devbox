@@ -35,6 +35,17 @@ RUN git clone https://github.com/lakshmankumar12/vimfiles /home/lnara002/github/
        python /home/lnara002/github/vundle-headless-installer/install.py && \
        chown -R lnara002: /home/lnara002
 
+# More tools
+RUN dpkg --add-architecture i386 && \
+         apt-get update && \
+         apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 && \
+         apt-get install -y python-pip ppp && \
+         pip install pexpect
+
+RUN echo "root:Docker!" | chpasswd
+RUN echo "lnara002:lnara002" | chpasswd  && \
+     adduser lnara002 sudo
+
 # reach outside world
 RUN mkdir /var/shared/ && \
     touch /var/shared/placeholder && \
@@ -42,4 +53,5 @@ RUN mkdir /var/shared/ && \
 VOLUME /var/shared
 
 USER lnara002
+WORKDIR /home/lnara002
 CMD ["bash"]
