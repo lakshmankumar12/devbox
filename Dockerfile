@@ -39,10 +39,13 @@ RUN git clone https://github.com/lakshmankumar12/vimfiles /home/lnara002/github/
 RUN dpkg --add-architecture i386 && \
          apt-get update && \
          apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 && \
-         apt-get install -y python-pip ppp && \
+         apt-get install -y python-pip ppp  openssh-server && \
          pip install pexpect
 
-RUN echo "root:Docker!" | chpasswd
+RUN echo "root:Docker!" | chpasswd; \
+        sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config; \
+        sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd; \
+        echo "export VISIBLE=now" >> /etc/profile;
 RUN echo "lnara002:lnara002" | chpasswd  && \
      adduser lnara002 sudo
 
@@ -54,4 +57,5 @@ VOLUME /var/shared
 
 USER lnara002
 WORKDIR /home/lnara002
+EXPOSE 22
 CMD ["bash"]
