@@ -2,7 +2,20 @@
 docker build -t=lakshmankumar/my-dev-box .
 
 # Run it
-docker run -P --name devbox --privileged -e DISPLAY=$DISPLAY -u lnara002 -v /tmp/.X11-unix:/tmp/.X11-unix:ro -v /home/lnara002:/var/shared -t -i lakshmankumar/my-dev-box
+#  -P                   -> maps random port-numbers of host to all exposed ports.
+#  --rm                 -> deletes the container automatically once its stoped (so that the name can be re-used again)
+#  --name               -> we always name our container devbox
+#  --privileged         -> not sure what privilge is needed
+#  -e DISPLAY=$DISPLAY  -> expose our host DISPLAY
+#  -v ..:..             -> DISPLAY is useful only with X-11 permissions!
+#  -u lakshman          -> start as this user.
+#  -t                   -> VERY IMP: give a tty to the container
+#  -i                   -> VERY IMP: make the container interactive
+#  lakshmankumar/devbox -> use this image.
+docker run -P --rm --name devbox --privileged -e DISPLAY=$DISPLAY -u lakshman -v /tmp/.X11-unix:/tmp/.X11-unix:ro -v $HOME:/var/shared -t -i lakshmankumar/my-dev-box
+
+#push the image if its good
+docker push lakshmankumar/my-dev-box
 
 #libgtk2.0-0:i386
 #libsm6:i386

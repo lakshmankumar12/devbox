@@ -1,8 +1,11 @@
 FROM ubuntu:latest
 MAINTAINER Lakshman Kumar <lakshmankumar@gmail.com>
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Install dev tools
 RUN apt-get update && apt-get install -y \
+            apt-utils \
             git \
             python \
             wget \
@@ -16,24 +19,10 @@ RUN apt-get update && apt-get install -y \
             tmux \
             curl \
             cscope \
-            ctags
-
-# Create user and add home-dir and github dir
-RUN useradd lnara002 && mkdir /home/lnara002 && \
-                        chown -R lnara002: /home/lnara002 && \
-                        mkdir /home/lnara002/github
-
-ENV HOME /home/lnara002
-
-# lets get our vimfiles and setup vim
-RUN git clone https://github.com/lakshmankumar12/vimfiles /home/lnara002/github/vimfiles &&  \
-       git clone https://github.com/lakshmankumar12/vundle-headless-installer.git /home/lnara002/github/vundle-headless-installer && \
-       mkdir -p /home/lnara002/.vim/plugin && \
-       ln -s /home/lnara002/github/vimfiles/lakshman.vim /home/lnara002/.vim/plugin/lakshman.vim && \
-       mkdir -p /home/lnara002/.vim/bundle/ && \
-       ln -s /home/lnara002/github/vimfiles/vimrc /home/lnara002/.vimrc && \
-       python /home/lnara002/github/vundle-headless-installer/install.py && \
-       chown -R lnara002: /home/lnara002
+            ctags \
+            sudo \
+            rubygems && \
+    gem install asciidoctor
 
 # More tools
 RUN dpkg --add-architecture i386 && \
@@ -46,16 +35,37 @@ RUN echo "root:Docker!" | chpasswd; \
         sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config; \
         sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd; \
         echo "export VISIBLE=now" >> /etc/profile;
-RUN echo "lnara002:lnara002" | chpasswd  && \
-     adduser lnara002 sudo
+
+# Create user and add home-dir and github dir
+RUN useradd lakshman && mkdir /home/lakshman && \
+                        mkdir /home/lakshman/github && \
+                        chown -R lakshman: /home/lakshman
+
+ENV HOME /home/lakshman
+
+RUN echo "lakshman:lakshman" | chpasswd  && \
+     adduser lakshman sudo
 
 # reach outside world
 RUN mkdir /var/shared/ && \
     touch /var/shared/placeholder && \
-    chown -R lnara002:lnara002 /var/shared
+    chown -R lakshman:lakshman /var/shared
 VOLUME /var/shared
 
-USER lnara002
-WORKDIR /home/lnara002
+USER lakshman
+WORKDIR /home/lakshman
+
+# lets get our vimfiles and setup vim
+RUN git clone https://github.com/lakshmankumar12/vimfiles /home/lakshman/github/vimfiles &&  \
+       git clone https://github.com/lakshmankumar12/vundle-headless-installer.git /home/lakshman/github/vundle-headless-installer && \
+       mkdir -p /home/lakshman/.vim/plugin && \
+       ln -s /home/lakshman/github/vimfiles/lakshman.vim /home/lakshman/.vim/plugin/lakshman.vim && \
+       mkdir -p /home/lakshman/.vim/bundle/ && \
+       ln -s /home/lakshman/github/vimfiles/vimrc /home/lakshman/.vimrc && \
+       echo "comment"
+
+RUN python /home/lakshman/github/vundle-headless-installer/install.py && \
+       chown -R lakshman: /home/lakshman
+
 EXPOSE 22
 CMD ["bash"]
