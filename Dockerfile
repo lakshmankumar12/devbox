@@ -6,9 +6,18 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install dev tools
 RUN apt-get update && apt-get install -y \
             apt-utils \
-            git \
+            locales && \
+    locale-gen en_US.UTF-8 && \
+    dpkg-reconfigure locales && \
+    echo 'LC_ALL=en_US.UTF-8\nLANG=en_US.UTF-8' >> /etc/environment && \
+    apt-get install -y git \
+            sudo \
             python \
             wget \
+            curl \
+            man \
+            unzip \
+            zsh \
             vim \
             strace \
             diffstat \
@@ -16,11 +25,10 @@ RUN apt-get update && apt-get install -y \
             cmake \
             build-essential \
             tcpdump \
+            iputils-ping \
             tmux \
-            curl \
             cscope \
             ctags \
-            sudo \
             rubygems && \
     gem install asciidoctor
 
@@ -42,6 +50,9 @@ RUN useradd lakshman && mkdir /home/lakshman && \
                         chown -R lakshman: /home/lakshman
 
 ENV HOME /home/lakshman
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
 
 RUN echo "lakshman:lakshman" | chpasswd  && \
      adduser lakshman sudo
@@ -49,7 +60,9 @@ RUN echo "lakshman:lakshman" | chpasswd  && \
 # reach outside world
 RUN mkdir /var/shared/ && \
     touch /var/shared/placeholder && \
-    chown -R lakshman:lakshman /var/shared
+    ln -s /var/shared /home/lakshman/host && \
+    chown -R lakshman:lakshman /var/shared && \
+    chown -R lakshman:lakshman /home/lakshman/host
 VOLUME /var/shared
 
 USER lakshman
@@ -67,5 +80,12 @@ RUN git clone https://github.com/lakshmankumar12/vimfiles /home/lakshman/github/
 RUN python /home/lakshman/github/vundle-headless-installer/install.py && \
        chown -R lakshman: /home/lakshman
 
+USER root
+COPY entrypoint.sh /home/lakshman/.entrypoint.sh
+RUN chown lakshman:lakshman /home/lakshman/.entrypoint.sh && chmod +x /home/lakshman/.entrypoint.sh
+USER lakshman
+
 EXPOSE 22
+
+ENTRYPOINT ["/home/lakshman/.entrypoint.sh"]
 CMD ["bash"]

@@ -19,3 +19,8 @@ docker push lakshmankumar/my-dev-box
 
 #libgtk2.0-0:i386
 #libsm6:i386
+
+Missing stuff:
+--------------
+
+dotfiles setup
