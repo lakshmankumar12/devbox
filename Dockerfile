@@ -83,6 +83,9 @@ RUN python /home/lakshman/github/vundle-headless-installer/install.py && \
 USER root
 COPY entrypoint.sh /home/lakshman/.entrypoint.sh
 RUN chown lakshman:lakshman /home/lakshman/.entrypoint.sh && chmod +x /home/lakshman/.entrypoint.sh
+
+RUN apt-get install -y psmisc lsof
+
 USER lakshman
 
 EXPOSE 22
