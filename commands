@@ -24,3 +24,7 @@ Missing stuff:
 --------------
 
 dotfiles setup
+  -- fzf
+  -- source .zshrc.local from .zshrc
+  -- git clone git@github.com:lakshmankumar12/zsh-git-prompt.git ~/github/zsh-git-prompt
+

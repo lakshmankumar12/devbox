@@ -68,7 +68,6 @@ RUN mkdir /var/shared/ && \
     chsh -s /usr/bin/zsh lakshman
 VOLUME /var/shared
 
-USER lakshman
 WORKDIR /home/lakshman
 
 # lets get our vimfiles and setup vim
@@ -83,24 +82,39 @@ RUN git clone https://github.com/lakshmankumar12/vimfiles /home/lakshman/github/
 RUN mkdir -p /home/lakshman/.vim/plugin && \
        mkdir -p /home/lakshman/.vim/bundle/ && \
        ln -s /home/lakshman/github/vimfiles/vimrc /home/lakshman/.vimrc && \
+       python /home/lakshman/github/vundle-headless-installer/install.py
+
+RUN sed 's/ZSH_THEME="robbyrussell"/ZSH_THEME="agnoster"/' -i /home/lakshman/.zshrc && \
        ln -s /home/lakshman/github/vimfiles/lakshman.vim /home/lakshman/.vim/plugin && \
        ln -s /home/lakshman/github/vimfiles/gitlsfiles.vim /home/lakshman/.vim/plugin && \
        ln -s /home/lakshman/github/dotfiles/bashrc.local /home/lakshman/.bashrc.local && \
        ln -s /home/lakshman/github/dotfiles/gitconfig /home/lakshman/.gitconfig && \
        ln -s /home/lakshman/github/dotfiles/tmux.conf /home/lakshman/.tmux.conf && \
-       ln -s /home/lakshman/github/dotfiles/zshrc.conf /home/lakshman/.zshrc.local && \
+       ln -s /home/lakshman/github/dotfiles/zshrc.local /home/lakshman/.zshrc.local && \
        ln -s /home/lakshman/github/dotfiles/bashrc_for_zsh /home/lakshman/.bashrc_for_zsh
 
-RUN python /home/lakshman/github/vundle-headless-installer/install.py && \
-       chown -R lakshman: /home/lakshman
-
-USER root
+COPY entrypoint.py /home/lakshman/.entrypoint.py
 COPY entrypoint.sh /home/lakshman/.entrypoint.sh
-RUN chown lakshman:lakshman /home/lakshman/.entrypoint.sh && chmod +x /home/lakshman/.entrypoint.sh
+RUN chown -R lakshman:lakshman /home/lakshman && chmod +x /home/lakshman/.entrypoint.sh
 
 USER lakshman
+
+RUN echo "source ~/.zshrc.local" >> /home/lakshman/.zshrc && \
+      mkdir /home/lakshman/bin && \
+      git clone --depth 1 https://github.com/junegunn/fzf.git /home/lakshman/.fzf && \
+      /home/lakshman/.fzf/install --bin && \
+      ln -s /home/lakshman/.fzf/bin/fzf /home/lakshman/bin/fzf && \
+      ln -s /home/lakshman/.fzf/bin/fzf-tmux /home/lakshman/bin/fzf-tmux
+
+RUN mkdir /home/lakshman/software && \
+    git clone --depth 1 https://github.com/seebi/dircolors-solarized.git /home/lakshman/software/dircolors-solarized && \
+    git clone --depth 1 https://github.com/lakshmankumar12/tmux-status-notify /home/lakshman/github/tmux-status-notify && \
+    git clone --depth 1 https://github.com/lakshmankumar12/tmux-powerline.git /home/lakshman/software/tmux-powerline && \
+    rm /home/lakshman/software/tmux-powerline/segments/lk_notif_info.sh && \
+    ln -s /home/lakshman/github/tmux-status-notify/lk_notif_info.sh /home/lakshman/software/tmux-powerline/segments/lk_notif_info.sh && \
+    ln -s /usr/bin/vim /home/lakshman/bin/vim
+
 
 EXPOSE 22
 
 ENTRYPOINT ["/home/lakshman/.entrypoint.sh"]
-CMD ["bash"]
