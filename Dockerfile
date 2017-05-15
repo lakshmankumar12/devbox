@@ -18,6 +18,9 @@ RUN apt-get update && apt-get install -y \
             wget \
             curl \
             man \
+            ghostscript \
+            imagemagick \
+            id3v2 \
             unzip \
             zsh \
             vim \
@@ -39,12 +42,16 @@ RUN dpkg --add-architecture i386 && \
          apt-get update && \
          apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 && \
          apt-get install -y python-pip ppp  openssh-server && \
-         pip install pexpect
+         pip install pexpect && \
+         pip install eyeD3
 
 RUN echo "root:Docker!" | chpasswd; \
         sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config; \
         sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd; \
         echo "export VISIBLE=now" >> /etc/profile;
+
+RUN bash -c "curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl" && \
+    chmod +x /usr/local/bin/youtube-dl
 
 # Create user and add home-dir and github dir
 RUN useradd lakshman && mkdir /home/lakshman && \

@@ -23,8 +23,11 @@ docker push lakshmankumar/my-dev-box
 Missing stuff:
 --------------
 
-dotfiles setup
-  -- fzf
-  -- source .zshrc.local from .zshrc
-  -- git clone git@github.com:lakshmankumar12/zsh-git-prompt.git ~/github/zsh-git-prompt
+-> some stragey to have prompt_context shown
 
+-> libav-tools, pdftk
+-> autojump
+    apt-get install autojump
+    mkdir ~/.autojump, ln -s /usr/share/autojump ~/.autojump/bin
+
+     
