@@ -1,0 +1,42 @@
+export USER=lakshman
+export SHELL=/usr/bin/zsh
+
+export PATH=$PATH:~/host/bin
+
+cd .oh-my-zsh
+
+patch -p1 <<EOF
+diff --git a/themes/agnoster.zsh-theme b/themes/agnoster.zsh-theme
+index ac5e87a..9adb414 100644
+--- a/themes/agnoster.zsh-theme
++++ b/themes/agnoster.zsh-theme
+@@ -217,7 +217,7 @@ build_prompt() {
+   RETVAL=$?
+   prompt_status
+   prompt_virtualenv
+-  #prompt_context
++  prompt_context
+   prompt_dir
+   prompt_git
+   prompt_bzr
+EOF
+
+cd ..
+
+cd github/dotfiles
+patch -p1 <<EOF
+diff --git a/tmux.conf b/tmux.conf
+index 500543b..6bb4765 100644
+--- a/tmux.conf
++++ b/tmux.conf
+@@ -103,6 +103,7 @@ set-option -g status on
+ set-option -g status-interval 2
+ set-option -g status-utf8 on
+ set-option -g status-justify "centre"
++set-option -g status-bg colour201
+ set-option -g status-left-length 60
+ set-option -g status-right-length 90
+ set-option -g status-left  "#(~/software/tmux-powerline/powerline.sh left)"
+EOF
+
+cd ../..
