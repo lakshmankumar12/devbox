@@ -39,4 +39,32 @@ index 500543b..6bb4765 100644
  set-option -g status-left  "#(~/software/tmux-powerline/powerline.sh left)"
 EOF
 
+cd /home/lakshman/software/autojump && ./install.py
+cd /home/lakshman
+
 cd ../..
+
+sudo mkdir /Users
+sudo chown lakshman:lakshman /Users
+ln -s /var/shared /Users/lakshman.narayanan
+
+sudo /etc/init.d/ssh start
+
+mkdir /home/lakshman/.ssh
+chmod 700 /home/lakshman/.ssh
+cp /home/lakshman/host/.ssh/id_rsa* /home/lakshman/.ssh
+cat /home/lakshman/.ssh/id_rsa.pub >> /home/lakshman/.ssh/authorized_keys
+chmod 600 /home/lakshman/.ssh/authorized_keys
+
+mkdir /home/lakshman/forge_home
+sshfs lakshman_narayanan@mforge1:/home/lakshman_narayanan /home/lakshman/forge_home
+
+
+ln -s /var/shared/github/mp3_tag_editor/prepare_tag_commands.py $HOME/bin
+
+sudo pip install pathlib
+sudo pip install grako
+
+cd /home/lakshman
+
+tmux new-session -s docker-main

@@ -12,6 +12,11 @@ RUN apt-get update && apt-get install -y \
     echo 'LC_ALL=en_US.UTF-8\nLANG=en_US.UTF-8' >> /etc/environment && \
     apt-get install -y git \
             sudo \
+            pkg-config \
+            cmake \
+            build-essential \
+            libreadline6 \
+            libreadline6-dev \
             python \
             psmisc \
             lsof \
@@ -20,15 +25,14 @@ RUN apt-get update && apt-get install -y \
             man \
             ghostscript \
             imagemagick \
+            pdftk \
+            libav-tools \
             id3v2 \
             unzip \
             zsh \
             vim \
             strace \
             diffstat \
-            pkg-config \
-            cmake \
-            build-essential \
             tcpdump \
             iputils-ping \
             tmux \
@@ -78,10 +82,10 @@ VOLUME /var/shared
 WORKDIR /home/lakshman
 
 # lets get our vimfiles and setup vim
-RUN git clone https://github.com/lakshmankumar12/vimfiles /home/lakshman/github/vimfiles &&  \
-       git clone https://github.com/lakshmankumar12/vundle-headless-installer.git /home/lakshman/github/vundle-headless-installer && \
-       git clone https://github.com/lakshmankumar12/zsh-git-prompt.git /home/lakshman/github/zsh-git-prompt && \
-       git clone https://github.com/lakshmankumar12/dotfiles /home/lakshman/github/dotfiles && \
+RUN git clone --depth 1 https://github.com/lakshmankumar12/vimfiles /home/lakshman/github/vimfiles &&  \
+       git clone --depth 1 https://github.com/lakshmankumar12/vundle-headless-installer.git /home/lakshman/github/vundle-headless-installer && \
+       git clone --depth 1 https://github.com/lakshmankumar12/zsh-git-prompt.git /home/lakshman/github/zsh-git-prompt && \
+       git clone --depth 1 https://github.com/lakshmankumar12/dotfiles /home/lakshman/github/dotfiles && \
        bash -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" && \
        bash -c "cd /home/lakshman/.oh-my-zsh && patch -p1 -i <(curl 'https://gist.githubusercontent.com/lakshmankumar12/5d6abf8a93cc9afcbffe98cb38e362be/raw/74cafc1c1571fbd6639098d99a48d3d28de73404/agnoster.patch')" && \
        echo "comment to be edited, if u want to github get ur repo again on its change - blah blah"
@@ -104,6 +108,17 @@ COPY entrypoint.py /home/lakshman/.entrypoint.py
 COPY entrypoint.sh /home/lakshman/.entrypoint.sh
 RUN chown -R lakshman:lakshman /home/lakshman && chmod +x /home/lakshman/.entrypoint.sh
 
+RUN apt-get install -y wireshark silversearcher-ag
+
+RUN apt-get install -y vpnc libxss1 libappindicator1 libindicator7 sshfs && \
+      wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+RUN (sudo dpkg -i google-chrome*.deb || true ) && \
+      sudo apt-get install -y -f &&  \
+      sudo dpkg -i google-chrome*.deb
+
+RUN apt-get install -y mosh
+
 USER lakshman
 
 RUN echo "source ~/.zshrc.local" >> /home/lakshman/.zshrc && \
@@ -117,10 +132,10 @@ RUN mkdir /home/lakshman/software && \
     git clone --depth 1 https://github.com/seebi/dircolors-solarized.git /home/lakshman/software/dircolors-solarized && \
     git clone --depth 1 https://github.com/lakshmankumar12/tmux-status-notify /home/lakshman/github/tmux-status-notify && \
     git clone --depth 1 https://github.com/lakshmankumar12/tmux-powerline.git /home/lakshman/software/tmux-powerline && \
+    git clone --depth 1 https://github.com/joelthelion/autojump.git /home/lakshman/software/autojump && \
     rm /home/lakshman/software/tmux-powerline/segments/lk_notif_info.sh && \
     ln -s /home/lakshman/github/tmux-status-notify/lk_notif_info.sh /home/lakshman/software/tmux-powerline/segments/lk_notif_info.sh && \
     ln -s /usr/bin/vim /home/lakshman/bin/vim
-
 
 EXPOSE 22
 

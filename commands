@@ -2,7 +2,7 @@
 docker build -t=lakshmankumar/my-dev-box .
 
 # Run it
-#  -P                   -> maps random port-numbers of host to all exposed ports.
+#  -P                   -> maps random ln -s /var/shared/github/mp3_tag_editor/prepare_tag_commands.py $HOME/binort-numbers of host to all exposed ports.
 #  --rm                 -> deletes the container automatically once its stoped (so that the name can be re-used again)
 #  --name               -> we always name our container devbox
 #  --privileged         -> not sure what privilge is needed
@@ -25,9 +25,26 @@ Missing stuff:
 
 -> some stragey to have prompt_context shown
 
--> libav-tools, pdftk
--> autojump
-    apt-get install autojump
-    mkdir ~/.autojump, ln -s /usr/share/autojump ~/.autojump/bin
+todo:
+  pip install pathlib
+  pip install grako
+  sshfs
+
+
+  sudo apt-get install vpnc
+  sudo apt-get install libxss1 libappindicator1 libindicator7
+  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+  sudo apt-get install libxss1 libappindicator1 libindicator7
+  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  sudo dpkg -i google-chrome*.deb || true
+  sudo apt-get install -f
+  sudo dpkg -i google-chrome*.deb
+
+
+Done:
+-> silversearcher-ag, wireshark
+   autojump.
+    Install is moved to on-start
 
      

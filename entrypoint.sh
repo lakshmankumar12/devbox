@@ -1,3 +1,5 @@
 #!/bin/bash
-python /home/lakshman/.entrypoint.py
-exec "/usr/bin/zsh"
+
+. ~/host/github/devbox/start_on_docker
+
+#exec "/usr/bin/zsh"
