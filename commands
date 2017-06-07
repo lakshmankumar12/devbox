@@ -20,6 +20,14 @@ docker push lakshmankumar/my-dev-box
 #libgtk2.0-0:i386
 #libsm6:i386
 
+
+centos:
+-------
+
+docker build -t=lakshmankumar/ary-centos
+
+docker run -P --rm --name ary-centos -v $HOME:/var/shared -t -i lakshmankumar/ary-centos
+
 Missing stuff:
 --------------
 
@@ -28,7 +36,20 @@ Missing stuff:
 todo:
   pip install pathlib
   pip install grako
-  sshfs
+  pip install gmusicapi
+  sudo apt-get update
+  sudo apt-get install software-properties-common
+  sudo apt-get install python-mutagen
+  sudo apt-get install python3 python3-pip python3-mutagen
+  sudo apt-get install expect
+  sudo apt-get install gdb
+  sudo apt-get install poppler-utils
+
+  /* not needed */
+  sudo add-apt-repository ppa:neovim-ppa/stable
+  sudo add-apt-repository ppa:neovim-ppa/stable
+  sudo apt-get update
+  sudo apt-get install neovim
 
 
   sudo apt-get install vpnc
@@ -46,5 +67,6 @@ Done:
 -> silversearcher-ag, wireshark
    autojump.
     Install is moved to on-start
+  sshfs
 
      

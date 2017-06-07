@@ -119,6 +119,9 @@ RUN (sudo dpkg -i google-chrome*.deb || true ) && \
 
 RUN apt-get install -y mosh
 
+ENV TZ=America/Los_Angeles
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 USER lakshman
 
 RUN echo "source ~/.zshrc.local" >> /home/lakshman/.zshrc && \

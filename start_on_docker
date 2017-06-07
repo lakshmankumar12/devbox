@@ -52,8 +52,8 @@ sudo /etc/init.d/ssh start
 
 mkdir /home/lakshman/.ssh
 chmod 700 /home/lakshman/.ssh
-cp /home/lakshman/host/.ssh/id_rsa* /home/lakshman/.ssh
-cat /home/lakshman/.ssh/id_rsa.pub >> /home/lakshman/.ssh/authorized_keys
+cp /home/lakshman/host/.ssh/id_rsa* /home/lakshman/.ssh/
+cp /home/lakshman/host/.ssh/authorized_keys /home/lakshman/.ssh/
 chmod 600 /home/lakshman/.ssh/authorized_keys
 
 mkdir /home/lakshman/forge_home
@@ -64,6 +64,12 @@ ln -s /var/shared/github/mp3_tag_editor/prepare_tag_commands.py $HOME/bin
 
 sudo pip install pathlib
 sudo pip install grako
+
+export TZ=America/Los_Angeles
+sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && sudo echo $TZ > /etc/timezone
+sudo apt-get install -y expect
+
+ln -s ~/host/gitlab/aryaka-scripts/update_my_ip.tcl ~/bin/
 
 cd /home/lakshman
 
