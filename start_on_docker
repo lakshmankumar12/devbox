@@ -57,17 +57,12 @@ cp /home/lakshman/host/.ssh/authorized_keys /home/lakshman/.ssh/
 chmod 600 /home/lakshman/.ssh/authorized_keys
 
 mkdir /home/lakshman/forge_home
-sshfs lakshman_narayanan@mforge1:/home/lakshman_narayanan /home/lakshman/forge_home
-
+#sshfs lakshman_narayanan@mforge1:/home/lakshman_narayanan /home/lakshman/forge_home
 
 ln -s /var/shared/github/mp3_tag_editor/prepare_tag_commands.py $HOME/bin
 
-sudo pip install pathlib
-sudo pip install grako
-
 export TZ=America/Los_Angeles
-sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && sudo echo $TZ > /etc/timezone
-sudo apt-get install -y expect
+sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
 
 ln -s ~/host/gitlab/aryaka-scripts/update_my_ip.tcl ~/bin/
 

@@ -12,14 +12,10 @@ docker build -t=lakshmankumar/my-dev-box .
 #  -t                   -> VERY IMP: give a tty to the container
 #  -i                   -> VERY IMP: make the container interactive
 #  lakshmankumar/devbox -> use this image.
-docker run -P --rm --name devbox --privileged -e DISPLAY=$DISPLAY -u lakshman -v /tmp/.X11-unix:/tmp/.X11-unix:ro -v $HOME:/var/shared -t -i lakshmankumar/my-dev-box
+docker run -P --rm --name devbox --privileged -e DISPLAY=$DISPLAY -u lakshman -v /dev:/dev -v /tmp/.X11-unix:/tmp/.X11-unix:ro -v $HOME:/var/shared -t -i lakshmankumar/my-dev-box
 
 #push the image if its good
 docker push lakshmankumar/my-dev-box
-
-#libgtk2.0-0:i386
-#libsm6:i386
-
 
 centos:
 -------
@@ -34,6 +30,15 @@ Missing stuff:
 -> some stragey to have prompt_context shown
 
 todo:
+  /* not needed */
+  sudo add-apt-repository ppa:neovim-ppa/stable
+  sudo add-apt-repository ppa:neovim-ppa/stable
+  sudo apt-get update
+  sudo apt-get install neovim
+
+
+
+Done:
   pip install pathlib
   pip install grako
   pip install gmusicapi
@@ -44,13 +49,7 @@ todo:
   sudo apt-get install expect
   sudo apt-get install gdb
   sudo apt-get install poppler-utils
-
-  /* not needed */
-  sudo add-apt-repository ppa:neovim-ppa/stable
-  sudo add-apt-repository ppa:neovim-ppa/stable
-  sudo apt-get update
-  sudo apt-get install neovim
-
+  sudo apt-get install gparted dosfstools udev
 
   sudo apt-get install vpnc
   sudo apt-get install libxss1 libappindicator1 libindicator7
@@ -62,8 +61,6 @@ todo:
   sudo apt-get install -f
   sudo dpkg -i google-chrome*.deb
 
-
-Done:
 -> silversearcher-ag, wireshark
    autojump.
     Install is moved to on-start

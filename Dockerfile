@@ -7,17 +7,20 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
             apt-utils \
             locales && \
-    locale-gen en_US.UTF-8 && \
-    dpkg-reconfigure locales && \
-    echo 'LC_ALL=en_US.UTF-8\nLANG=en_US.UTF-8' >> /etc/environment && \
-    apt-get install -y git \
+            locale-gen en_US.UTF-8 && \
+            dpkg-reconfigure locales && \
+            echo 'LC_ALL=en_US.UTF-8\nLANG=en_US.UTF-8' >> /etc/environment && \
+            apt-get install -y git \
             sudo \
             pkg-config \
             cmake \
             build-essential \
             libreadline6 \
             libreadline6-dev \
-            python \
+            python python-pip python-mutagen \
+            python3 python3-pip python3-mutagen \
+            ppp  \
+            openssh-server \
             psmisc \
             lsof \
             wget \
@@ -38,16 +41,30 @@ RUN apt-get update && apt-get install -y \
             tmux \
             cscope \
             ctags \
-            rubygems && \
-    gem install asciidoctor
+            software-properties-common \
+            expect \
+            gdb \
+            poppler-utils \
+            gparted dosfstools udev \
+            wireshark silversearcher-ag \
+            vpnc libxss1 libappindicator1 libindicator7 sshfs \
+            mosh \
+            rubygems
+
+RUN  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+              ( dpkg -i google-chrome*.deb || true ) && \
+              sudo apt-get install -y -f &&  \
+              sudo dpkg -i google-chrome*.deb
+
+RUN gem install asciidoctor
+
+RUN pip install pexpect eyeD3 pathlib gmusicapi grako && \
+    pip3 install flask_oauthlib flask_script
 
 # More tools
-RUN dpkg --add-architecture i386 && \
-         apt-get update && \
-         apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 && \
-         apt-get install -y python-pip ppp  openssh-server && \
-         pip install pexpect && \
-         pip install eyeD3
+#RUN dpkg --add-architecture i386 && \
+#apt-get update && \
+#apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 && \
 
 RUN echo "root:Docker!" | chpasswd; \
         sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config; \
@@ -104,24 +121,14 @@ RUN sed 's/ZSH_THEME="robbyrussell"/ZSH_THEME="agnoster"/' -i /home/lakshman/.zs
        ln -s /home/lakshman/github/dotfiles/zshrc.local /home/lakshman/.zshrc.local && \
        ln -s /home/lakshman/github/dotfiles/bashrc_for_zsh /home/lakshman/.bashrc_for_zsh
 
-COPY entrypoint.py /home/lakshman/.entrypoint.py
-COPY entrypoint.sh /home/lakshman/.entrypoint.sh
-RUN chown -R lakshman:lakshman /home/lakshman && chmod +x /home/lakshman/.entrypoint.sh
-
-RUN apt-get install -y wireshark silversearcher-ag
-
-RUN apt-get install -y vpnc libxss1 libappindicator1 libindicator7 sshfs && \
-      wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-
-RUN (sudo dpkg -i google-chrome*.deb || true ) && \
-      sudo apt-get install -y -f &&  \
-      sudo dpkg -i google-chrome*.deb
-
-RUN apt-get install -y mosh
-
 ENV TZ=America/Los_Angeles
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+#Any new root installs here
+
+#Root install ..over..
+
+RUN chown -R lakshman:lakshman /home/lakshman
 USER lakshman
 
 RUN echo "source ~/.zshrc.local" >> /home/lakshman/.zshrc && \
@@ -140,6 +147,15 @@ RUN mkdir /home/lakshman/software && \
     ln -s /home/lakshman/github/tmux-status-notify/lk_notif_info.sh /home/lakshman/software/tmux-powerline/segments/lk_notif_info.sh && \
     ln -s /usr/bin/vim /home/lakshman/bin/vim
 
+
+
+#Any new lakshman installs here
+
+USER root
+COPY entrypoint.sh /home/lakshman/.entrypoint.sh
+RUN chown lakshman:lakshman /home/lakshman/.entrypoint.sh && chmod +x /home/lakshman/.entrypoint.sh
+
 EXPOSE 22
+EXPOSE 5000
 
 ENTRYPOINT ["/home/lakshman/.entrypoint.sh"]
