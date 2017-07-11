@@ -4,26 +4,44 @@ export SHELL=/usr/bin/zsh
 export PATH=$PATH:~/host/bin
 
 cd .oh-my-zsh
+git checkout -- .
+rm -f $(git newfiles)
+git pull
 
-patch -p1 <<EOF
+patch -p1 <<'EOF'
 diff --git a/themes/agnoster.zsh-theme b/themes/agnoster.zsh-theme
-index ac5e87a..9adb414 100644
+index 07546fd..36abd99 100644
 --- a/themes/agnoster.zsh-theme
 +++ b/themes/agnoster.zsh-theme
-@@ -217,7 +217,7 @@ build_prompt() {
-   RETVAL=$?
-   prompt_status
-   prompt_virtualenv
--  #prompt_context
-+  prompt_context
-   prompt_dir
-   prompt_git
-   prompt_bzr
+@@ -80,7 +80,7 @@ prompt_end() {
+ # Context: user@hostname (who am I and where am I)
+ prompt_context() {
+   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
+-    prompt_segment black default "%(!.%{%F{yellow}%}.)$USER@%m"
++    prompt_segment black default "%(!.%{%F{yellow}%}.)%m"
+   fi
+ }
+ 
+@@ -118,12 +118,12 @@ prompt_git() {
+     zstyle ':vcs_info:*' enable git
+     zstyle ':vcs_info:*' get-revision true
+     zstyle ':vcs_info:*' check-for-changes true
+-    zstyle ':vcs_info:*' stagedstr '✚'
+-    zstyle ':vcs_info:*' unstagedstr '●'
++    zstyle ':vcs_info:*' stagedstr ' '
++    zstyle ':vcs_info:*' unstagedstr ' '
+     zstyle ':vcs_info:*' formats ' %u%c'
+     zstyle ':vcs_info:*' actionformats ' %u%c'
+     vcs_info
+-    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
++    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }$(git_super_status)${mode}"
+   fi
+ }
+ 
 EOF
 
-cd ..
-
-cd github/dotfiles
+cd /home/lakshman/github/dotfiles
+git pull
 patch -p1 <<EOF
 diff --git a/tmux.conf b/tmux.conf
 index 500543b..6bb4765 100644
@@ -39,14 +57,79 @@ index 500543b..6bb4765 100644
  set-option -g status-left  "#(~/software/tmux-powerline/powerline.sh left)"
 EOF
 
+cd /home/lakshman/github/vimfiles
+git pull
+
 cd /home/lakshman/software/autojump && ./install.py
 cd /home/lakshman
 
+patch -p1 <<'EOF'
+diff --git a/zshrc b/zshrc
+index 5219865..3c1ab75 100644
+--- a/.zshrc
++++ b/.zshrc
+@@ -7,7 +7,10 @@
+ # Set name of the theme to load. Optionally, if you set this to "random"
+ # it'll load a random theme each time that oh-my-zsh is loaded.
+ # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+-ZSH_THEME="agnoster"
++#ZSH_THEME="agnoster"
++ZSH_THEME="powerlevel9k/powerlevel9k"
++export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
++export POWERLEVEL9K_MODE=nerdfont-complete
+
+ # Uncomment the following line to use case-sensitive completion.
+ # CASE_SENSITIVE="true"
+EOF
+
+git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
+cd ~/.oh-my-zsh/custom/themes/powerlevel9k
+patch -p1 <<'EOF'
+diff --git a/functions/vcs.zsh b/functions/vcs.zsh
+index c3e507b..757ab23 100644
+--- a/functions/vcs.zsh
++++ b/functions/vcs.zsh
+@@ -7,6 +7,10 @@
+ ################################################################
+ 
+ set_default POWERLEVEL9K_VCS_SHOW_SUBMODULE_DIRTY true
++function +vi-git-replacement() {
++    hook_com[misc]+=" $(git_super_status)"
++}
++
+ function +vi-git-untracked() {
+     # TODO: check git >= 1.7.2 - see function git_compare_version()
+     local FLAGS
+diff --git a/powerlevel9k.zsh-theme b/powerlevel9k.zsh-theme
+index 26ab9cd..50aeadd 100755
+--- a/powerlevel9k.zsh-theme
++++ b/powerlevel9k.zsh-theme
+@@ -1134,10 +1134,10 @@ powerlevel9k_vcs_init() {
+ 
+   zstyle ':vcs_info:*' actionformats "%b %F{${POWERLEVEL9K_VCS_ACTIONFORMAT_FOREGROUND}}| %a%f"
+ 
+-  zstyle ':vcs_info:*' stagedstr " $(print_icon 'VCS_STAGED_ICON')"
+-  zstyle ':vcs_info:*' unstagedstr " $(print_icon 'VCS_UNSTAGED_ICON')"
++  zstyle ':vcs_info:*' stagedstr " "
++  zstyle ':vcs_info:*' unstagedstr " "
+ 
+-  defined POWERLEVEL9K_VCS_GIT_HOOKS || POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-untracked git-aheadbehind git-stash git-remotebranch git-tagname)
++  defined POWERLEVEL9K_VCS_GIT_HOOKS || POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-replacement)
+   zstyle ':vcs_info:git*+set-message:*' hooks $POWERLEVEL9K_VCS_GIT_HOOKS
+   defined POWERLEVEL9K_VCS_HG_HOOKS || POWERLEVEL9K_VCS_HG_HOOKS=(vcs-detect-changes)
+   zstyle ':vcs_info:hg*+set-message:*' hooks $POWERLEVEL9K_VCS_HG_HOOKS
+EOF
+
+cd /home/lakshman/github/zsh-git-prompt
+git pull
+
 cd ../..
+
 
 sudo mkdir /Users
 sudo chown lakshman:lakshman /Users
 ln -s /var/shared /Users/lakshman.narayanan
+ln -s /home/lakshman/host/gitlab /home/lakshman/gitlab
 
 sudo /etc/init.d/ssh start
 
@@ -65,6 +148,8 @@ export TZ=America/Los_Angeles
 sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
 
 ln -s ~/host/gitlab/aryaka-scripts/update_my_ip.tcl ~/bin/
+ln -s /usr/bin/vim ~/bin/nvim
+ln -s /usr/bin/zsh ~/bin/zsh
 
 cd /home/lakshman
 

@@ -125,6 +125,7 @@ ENV TZ=America/Los_Angeles
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 #Any new root installs here
+RUN apt-get install -y deluge
 
 #Root install ..over..
 
@@ -156,6 +157,6 @@ COPY entrypoint.sh /home/lakshman/.entrypoint.sh
 RUN chown lakshman:lakshman /home/lakshman/.entrypoint.sh && chmod +x /home/lakshman/.entrypoint.sh
 
 EXPOSE 22
-EXPOSE 5000
+EXPOSE 51413
 
 ENTRYPOINT ["/home/lakshman/.entrypoint.sh"]
