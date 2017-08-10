@@ -51,7 +51,7 @@ index 500543b..6bb4765 100644
  set-option -g status-interval 2
  set-option -g status-utf8 on
  set-option -g status-justify "centre"
-+set-option -g status-bg colour201
++set-option -g status-bg colour140
  set-option -g status-left-length 60
  set-option -g status-right-length 90
  set-option -g status-left  "#(~/software/tmux-powerline/powerline.sh left)"
@@ -130,6 +130,7 @@ sudo mkdir /Users
 sudo chown lakshman:lakshman /Users
 ln -s /var/shared /Users/lakshman.narayanan
 ln -s /home/lakshman/host/gitlab /home/lakshman/gitlab
+ln -s /home/lakshman/host/src /home/lakshman/src
 
 sudo /etc/init.d/ssh start
 
@@ -143,6 +144,7 @@ mkdir /home/lakshman/forge_home
 #sshfs lakshman_narayanan@mforge1:/home/lakshman_narayanan /home/lakshman/forge_home
 
 ln -s /var/shared/github/mp3_tag_editor/prepare_tag_commands.py $HOME/bin
+ln -s /var/shared/github/mp3_tag_editor/shorten_mp3_file.py $HOME/bin
 
 export TZ=America/Los_Angeles
 sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime

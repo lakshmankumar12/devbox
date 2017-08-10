@@ -12,7 +12,10 @@ docker build -t=lakshmankumar/my-dev-box .
 #  -t                   -> VERY IMP: give a tty to the container
 #  -i                   -> VERY IMP: make the container interactive
 #  lakshmankumar/devbox -> use this image.
-docker run -P --rm --name devbox --privileged -e DISPLAY=$DISPLAY -u lakshman -v /dev:/dev -v /tmp/.X11-unix:/tmp/.X11-unix:ro -v $HOME:/var/shared -t -i lakshmankumar/my-dev-box
+docker run -P --rm --name devbox --hostname DevBox --privileged -e DISPLAY=$DISPLAY -u lakshman -v /dev:/dev -v /tmp/.X11-unix:/tmp/.X11-unix:ro -v $HOME:/var/shared -t -i lakshmankumar/my-dev-box
+
+#for vpn
+docker run -P --rm --name for-vpn --hostname ForVpn --privileged -e DISPLAY=$DISPLAY -u lakshman -v /tmp/.X11-unix:/tmp/.X11-unix:ro -v $HOME:/var/shared -t -i lakshmankumar/my-dev-box
 
 #push the image if its good
 docker push lakshmankumar/my-dev-box
@@ -29,14 +32,63 @@ Missing stuff:
 
 -> some stragey to have prompt_context shown
 
-todo:
-  /* not needed */
+TODO:
+----
+
   sudo add-apt-repository ppa:neovim-ppa/stable
-  sudo add-apt-repository ppa:neovim-ppa/stable
+  # ******WARNING: WARNING:******* Type sudo pass and press enter
   sudo apt-get update
-  sudo apt-get install neovim
+  sudo apt-get -y install neovim
+  sudo apt-get -y install clang libclang-dev libssl-dev zlib1g-dev
+  sudo apt-get -y install asciinema
+  sudo apt-get -y install python-software-properties
+  sudo apt-get -y install teseq
+
+  pip install neovim
+  pip3 install neovim
+
+  Update vimrc -> 
+  rm ~/bin/nvim
+  ln -s /usr/bin/nvim ~/bin/nvim
+  mkdir -p ~/.config/nvim
+  ln -s ~/github/vimfiles/vimrc ~/.config/nvim/init.vim
+  ln -s ~/github/vimfiles/sn_git.vim ~/.vim/plugin
+  ln -s ~/github/vimfiles/myultisnippets ~/.config/nvim
+
+  let g:deoplete#sources#clang#libclang_path='/usr/lib/llvm-3.8/lib/libclang.so'
+  let g:deoplete#sources#clang#clang_header='/usr/lib/llvm-3.8/include'
+
+  #rtags
+  git clone --recursive https://github.com/Andersbakken/rtags.git $HOME/software/rtags
+  cd $HOME/software/rtags
+  rm -rf build
+  mkdir build && cd build
+  export LIBCLANG_CXXFLAGS=-I/usr/lib/llvm-3.8/include
+  export LIBCLANG_LIBDIR=/usr/lib/llvm-3.8/lib
+  cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_INSTALL_PREFIX="/home/lakshman/software/rtags/build/install" ..
+  make install
+  cd install
+  mkdir wrap
+  cd wrap
+  ln -s ../bin/gcc-rtags-wrapper.sh gcc
+  ln -s ../bin/gcc-rtags-wrapper.sh g++
+
+  Update basrc:
+  export RTAGS_WRAP_PATH=/home/lakshman/software/rtags/build/install/wrap
+
+  ln -s /home/lakshman/software/rtags/build/install/bin/rc /home/lakshman/bin/
+  ln -s /home/lakshman/software/rtags/build/install/bin/rp /home/lakshman/bin/
+  ln -s /home/lakshman/software/rtags/build/install/bin/rdm /home/lakshman/bin/
 
 
+Node & npm:
+
+  curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+  sudo apt-get -y install nodejs
+
+
+  sudo apt-get -y install imagemagick gifsicle
+  sudo npm install --global phantomjs2
 
 Done:
   pip install pathlib
