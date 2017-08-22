@@ -155,4 +155,5 @@ ln -s /usr/bin/zsh ~/bin/zsh
 
 cd /home/lakshman
 
+export TERM=screen-256color-bce
 tmux new-session -s docker-main

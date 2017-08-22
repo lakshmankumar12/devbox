@@ -2,7 +2,7 @@
 docker build -t=lakshmankumar/my-dev-box .
 
 # Run it
-#  -P                   -> maps random ln -s /var/shared/github/mp3_tag_editor/prepare_tag_commands.py $HOME/binort-numbers of host to all exposed ports.
+#  -P                   -> maps random port-numbers of host to all exposed ports.
 #  --rm                 -> deletes the container automatically once its stoped (so that the name can be re-used again)
 #  --name               -> we always name our container devbox
 #  --privileged         -> not sure what privilge is needed
@@ -43,6 +43,7 @@ TODO:
   sudo apt-get -y install asciinema
   sudo apt-get -y install python-software-properties
   sudo apt-get -y install teseq
+  sudo apt-get -y install vlc
 
   pip install neovim
   pip3 install neovim
