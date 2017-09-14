@@ -126,6 +126,11 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 #Any new root installs here
 RUN apt-get install -y deluge
+RUN add-apt-repository ppa:neovim-ppa/stable -y
+RUN apt-get update
+RUN apt-get -y install neovim clang libclang-dev libssl-dev zlib1g-dev asciinema python-software-properties teseq
+RUN bash -c "curl -sL https://deb.nodesource.com/setup_8.x | bash -"
+RUN apt-get -y install nodejs
 
 #Root install ..over..
 
@@ -151,6 +156,10 @@ RUN mkdir /home/lakshman/software && \
 
 
 #Any new lakshman installs here
+RUN pip install neovim
+RUN pip3 install neovim
+RUN pip3 install ipython
+RUN ln -s /home/lakshman/.local/bin/ipython3 /home/lakshman/bin/
 
 USER root
 COPY entrypoint.sh /home/lakshman/.entrypoint.sh

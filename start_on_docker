@@ -120,6 +120,57 @@ index 26ab9cd..50aeadd 100755
    zstyle ':vcs_info:hg*+set-message:*' hooks $POWERLEVEL9K_VCS_HG_HOOKS
 EOF
 
+cd /home/lakshman/github/vimfiles
+patch -p1 <<'EOF'
+diff --git a/vimrc b/vimrc
+index 7d3c42d..777001f 100755
+--- a/vimrc
++++ b/vimrc
+@@ -378,8 +378,8 @@ if s:uname == "Darwin"
+     let g:deoplete#sources#clang#libclang_path='/usr/local/opt/llvm/lib/libclang.dylib'
+     let g:deoplete#sources#clang#clang_header='/usr/local/opt/llvm/include'
+ else
+-    let g:deoplete#sources#clang#libclang_path=g:my_home . '/install/clang/local/lib.hide/libclang.so.3.6'
+-    let g:deoplete#sources#clang#clang_header=g:my_home . '/install/clang/local/include/clang'
++    let g:deoplete#sources#clang#libclang_path='/usr/lib/llvm-3.8/lib/libclang.so'
++    let g:deoplete#sources#clang#clang_header='/usr/lib/llvm-3.8/include'
+ endif
+ let g:deoplete#sources#jedi#python_path=g:my_home . '/bin/python3'
+ let g:echodoc#enable_at_startup = 1
+EOF
+
+cd /home/lakshman/.vim/bundle/vim-airline-themes
+patch -p1 <<'EOF'
+diff --git a/autoload/airline/themes/solarized.vim b/autoload/airline/themes/solarized.vim
+index b88e1a4..76447a9 100644
+--- a/autoload/airline/themes/solarized.vim
++++ b/autoload/airline/themes/solarized.vim
+@@ -194,6 +194,21 @@ function! airline#themes#solarized#refresh()
+   let g:airline#themes#solarized#palette.replace_modified.airline_warning =
+         \ g:airline#themes#solarized#palette.normal.airline_warning
+
++  let g:airline#themes#solarized#palette.terminal = airline#themes#generate_color_map(
++        \ [s:R1[0].g, s:R1[1].g, s:R1[0].t, s:R1[1].t, s:R1[2]],
++        \ [s:R2[0].g, s:R2[1].g, s:R2[0].t, s:R2[1].t, s:R2[2]],
++        \ [s:R3[0].g, s:R3[1].g, s:R3[0].t, s:R3[1].t, s:R3[2]])
++
++  let g:airline#themes#solarized#palette.terminal.airline_warning =
++        \ g:airline#themes#solarized#palette.normal.airline_warning
++
++  let g:airline#themes#solarized#palette.terminal = {
++        \ 'airline_c': [s:RM[0].g, s:RM[1].g,
++        \ s:RM[0].t, s:RM[1].t, s:RM[2]]}
++
++  let g:airline#themes#solarized#palette.terminal.airline_warning =
++        \ g:airline#themes#solarized#palette.normal.airline_warning
++
+   let g:airline#themes#solarized#palette.tabline = {}
+
+   let g:airline#themes#solarized#palette.tabline.airline_tab = [
+EOF
+
+
+
 cd /home/lakshman/github/zsh-git-prompt
 git pull
 
@@ -149,11 +200,20 @@ ln -s /var/shared/github/mp3_tag_editor/shorten_mp3_file.py $HOME/bin
 export TZ=America/Los_Angeles
 sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
 
-ln -s ~/host/gitlab/aryaka-scripts/update_my_ip.tcl ~/bin/
-ln -s /usr/bin/vim ~/bin/nvim
-ln -s /usr/bin/zsh ~/bin/zsh
+ln -s /home/lakshman/host/gitlab/aryaka-scripts/update_my_ip.tcl /home/lakshman/bin/
+ln -s /usr/bin/zsh /home/lakshman/bin/zsh
+
+ln -s /usr/bin/nvim /home/lakshman/bin/nvim
+ln -s /usr/bin/python3 /home/lakshman/bin/python3
+ln -s /usr/bin/python2 /home/lakshman/bin/python27
+mkdir -p /home/lakshman/.config/nvim
+ln -s /home/lakshman/github/vimfiles/vimrc /home/lakshman/.config/nvim/init.vim
+ln -s /home/lakshman/github/vimfiles/sn_git.vim /home/lakshman/.vim/plugin
+ln -s /home/lakshman/github/vimfiles/myultisnippets /home/lakshman/.config/nvim
 
 cd /home/lakshman
+
+vi -c 'PluginInstall' -c 'qa!'
 
 export TERM=screen-256color-bce
 tmux new-session -s docker-main

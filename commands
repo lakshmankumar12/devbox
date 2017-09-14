@@ -30,34 +30,8 @@ docker run -P --rm --name ary-centos -v $HOME:/var/shared -t -i lakshmankumar/ar
 Missing stuff:
 --------------
 
--> some stragey to have prompt_context shown
-
 TODO:
 ----
-
-  sudo add-apt-repository ppa:neovim-ppa/stable
-  # ******WARNING: WARNING:******* Type sudo pass and press enter
-  sudo apt-get update
-  sudo apt-get -y install neovim
-  sudo apt-get -y install clang libclang-dev libssl-dev zlib1g-dev
-  sudo apt-get -y install asciinema
-  sudo apt-get -y install python-software-properties
-  sudo apt-get -y install teseq
-  sudo apt-get -y install vlc
-
-  pip install neovim
-  pip3 install neovim
-
-  Update vimrc -> 
-  rm ~/bin/nvim
-  ln -s /usr/bin/nvim ~/bin/nvim
-  mkdir -p ~/.config/nvim
-  ln -s ~/github/vimfiles/vimrc ~/.config/nvim/init.vim
-  ln -s ~/github/vimfiles/sn_git.vim ~/.vim/plugin
-  ln -s ~/github/vimfiles/myultisnippets ~/.config/nvim
-
-  let g:deoplete#sources#clang#libclang_path='/usr/lib/llvm-3.8/lib/libclang.so'
-  let g:deoplete#sources#clang#clang_header='/usr/lib/llvm-3.8/include'
 
   #rtags
   git clone --recursive https://github.com/Andersbakken/rtags.git $HOME/software/rtags
@@ -81,17 +55,13 @@ TODO:
   ln -s /home/lakshman/software/rtags/build/install/bin/rp /home/lakshman/bin/
   ln -s /home/lakshman/software/rtags/build/install/bin/rdm /home/lakshman/bin/
 
-
-Node & npm:
-
-  curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-  sudo apt-get -y install nodejs
+  ln -s ~/.local/bin/ipython3 ~/bin/
 
 
-  sudo apt-get -y install imagemagick gifsicle
-  sudo npm install --global phantomjs2
 
 Done:
+------
+
   pip install pathlib
   pip install grako
   pip install gmusicapi
@@ -119,4 +89,23 @@ Done:
     Install is moved to on-start
   sshfs
 
-     
+sudo add-apt-repository ppa:neovim-ppa/stable
+# ******WARNING: WARNING:******* Type sudo pass and press enter
+sudo apt-get update
+sudo apt-get -y install neovim clang libclang-dev libssl-dev zlib1g-dev asciinema python-software-properties teseq
+sudo apt-get -y install vlc
+
+pip install neovim
+pip3 install neovim
+pip3 install ipython
+
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt-get -y install nodejs
+
+Discarded:
+---------
+
+sudo apt-get -y install gifsicle
+sudo npm install --global phantomjs2
+
+
