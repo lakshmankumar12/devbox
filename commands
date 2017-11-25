@@ -33,6 +33,8 @@ Missing stuff:
 TODO:
 ----
 
+  dbus-x11
+
   #rtags
   git clone --recursive https://github.com/Andersbakken/rtags.git $HOME/software/rtags
   cd $HOME/software/rtags
@@ -109,3 +111,7 @@ sudo apt-get -y install gifsicle
 sudo npm install --global phantomjs2
 
 
+References
+------------
+
+https://github.com/sameersbn/docker-browser-box
