@@ -27,6 +27,15 @@ docker build -t=lakshmankumar/ary-centos
 
 docker run -P --rm --name ary-centos -v $HOME:/var/shared -t -i lakshmankumar/ary-centos
 
+Simple-routerish-docker
+------------------------
+
+make
+
+docker run -P --rm --name routerA -v $HOME:/var/shared -t -i lakshmankumar/simple-routerish-docker
+
+docker push lakshmankumar/simple-routerish-docker
+
 Missing stuff:
 --------------
 
@@ -34,6 +43,7 @@ TODO:
 ----
 
   dbus-x11
+  nvidia-340 mesa-utils 
 
   #rtags
   git clone --recursive https://github.com/Andersbakken/rtags.git $HOME/software/rtags

@@ -3,6 +3,9 @@ export SHELL=/usr/bin/zsh
 
 export PATH=$PATH:~/host/bin
 
+#Just get the su password quickly!
+sudo /bin/true
+
 cd .oh-my-zsh
 git checkout -- .
 rm -f $(git newfiles)
@@ -206,10 +209,14 @@ ln -s /usr/bin/zsh /home/lakshman/bin/zsh
 ln -s /usr/bin/nvim /home/lakshman/bin/nvim
 ln -s /usr/bin/python3 /home/lakshman/bin/python3
 ln -s /usr/bin/python2 /home/lakshman/bin/python27
+ln -s /usr/bin/python2 /home/lakshman/bin/python2.7
 mkdir -p /home/lakshman/.config/nvim
 ln -s /home/lakshman/github/vimfiles/vimrc /home/lakshman/.config/nvim/init.vim
 ln -s /home/lakshman/github/vimfiles/sn_git.vim /home/lakshman/.vim/plugin
 ln -s /home/lakshman/github/vimfiles/myultisnippets /home/lakshman/.config/nvim
+ln -s /home/lakshman/github/vimfiles/svn_lakshman.vim /home/lakshman/.vim/plugin
+
+cp /home/lakshman/host/github/devbox/devboxzshhistory /home/lakshman/.zsh_history
 
 cd /home/lakshman
 

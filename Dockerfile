@@ -49,14 +49,25 @@ RUN apt-get update && apt-get install -y \
             wireshark silversearcher-ag \
             vpnc libxss1 libappindicator1 libindicator7 sshfs \
             mosh \
-            rubygems
+            rubygems \
+            ruby-dev \
+            dbus-x11 \
+            pandoc \
+            clang libclang-dev libssl-dev zlib1g-dev asciinema python-software-properties teseq \
+            deluge
+
+RUN add-apt-repository ppa:neovim-ppa/stable -y
+RUN apt-get update
+RUN apt-get -y install neovim
+RUN bash -c "curl -sL https://deb.nodesource.com/setup_8.x | bash -"
+RUN apt-get -y install nodejs
 
 RUN  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
               ( dpkg -i google-chrome*.deb || true ) && \
               sudo apt-get install -y -f &&  \
               sudo dpkg -i google-chrome*.deb
 
-RUN gem install asciidoctor
+RUN gem install asciidoctor neovim
 
 RUN pip install pexpect eyeD3 pathlib gmusicapi grako && \
     pip3 install flask_oauthlib flask_script
@@ -125,12 +136,6 @@ ENV TZ=America/Los_Angeles
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 #Any new root installs here
-RUN apt-get install -y deluge
-RUN add-apt-repository ppa:neovim-ppa/stable -y
-RUN apt-get update
-RUN apt-get -y install neovim clang libclang-dev libssl-dev zlib1g-dev asciinema python-software-properties teseq
-RUN bash -c "curl -sL https://deb.nodesource.com/setup_8.x | bash -"
-RUN apt-get -y install nodejs
 
 #Root install ..over..
 
