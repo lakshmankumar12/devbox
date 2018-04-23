@@ -25,6 +25,8 @@ RUN echo "root:rPasswd!" | chpasswd; \
         sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd; \
         echo "export VISIBLE=now" >> /etc/profile;
 
+RUN apt-get install ethtool 
+
 RUN mkdir /var/shared/ && \
     touch /var/shared/placeholder
 

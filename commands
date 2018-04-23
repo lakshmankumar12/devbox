@@ -42,6 +42,13 @@ Missing stuff:
 TODO:
 ----
 
+  qpdf
+  apt-get install python-tk
+  w3m
+
+  pip install --upgrade pip
+  pip/pip3 install beautifulsoup4,scipy,matplotlib,python-tk
+
   dbus-x11
   nvidia-340 mesa-utils 
 

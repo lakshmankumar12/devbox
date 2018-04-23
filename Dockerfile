@@ -136,7 +136,11 @@ ENV TZ=America/Los_Angeles
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 #Any new root installs here
-
+RUN sudo -H pip2 install --upgrade pip
+RUN sudo -H pip3 install --upgrade pip
+RUN apt-get update
+RUN apt-get update
+RUN apt-get install -y python-tk python3-tk w3m qpdf
 #Root install ..over..
 
 RUN chown -R lakshman:lakshman /home/lakshman
@@ -161,9 +165,9 @@ RUN mkdir /home/lakshman/software && \
 
 
 #Any new lakshman installs here
-RUN pip install neovim
-RUN pip3 install neovim
-RUN pip3 install ipython
+RUN pip2 install --user neovim beautifulsoup4 scipy matplotlib lxml selenium pylyrics lyricwikia
+RUN pip3 install --user neovim beautifulsoup4 scipy matplotlib lxml selenium pylyrics lyricwikia
+RUN pip3 install --user ipython
 RUN ln -s /home/lakshman/.local/bin/ipython3 /home/lakshman/bin/
 
 USER root

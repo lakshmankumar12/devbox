@@ -1,0 +1,3 @@
+50.0	/home/lakshman/host/Downloads/songs-download
+40.0	/home/lakshman/host
+15.0	/home/lakshman/host/gitlab/aryaka-vpn

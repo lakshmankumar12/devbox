@@ -185,6 +185,7 @@ sudo chown lakshman:lakshman /Users
 ln -s /var/shared /Users/lakshman.narayanan
 ln -s /home/lakshman/host/gitlab /home/lakshman/gitlab
 ln -s /home/lakshman/host/src /home/lakshman/src
+ln -s /home/lakshman/github/dotfiles/bashrc.devbox /home/lakshman/.bashrc.devbox
 
 sudo /etc/init.d/ssh start
 
@@ -220,7 +221,12 @@ cp /home/lakshman/host/github/devbox/devboxzshhistory /home/lakshman/.zsh_histor
 
 cd /home/lakshman
 
-vi -c 'PluginInstall' -c 'qa!'
+hn=$(hostname)
+
+if [ "$hn" == "DevBox" ] ; then
+    vi -c 'PluginInstall' -c 'qa!'
+    cp /home/lakshman/host/github/devbox/autojump.txt /home/lakshman/.local/share/autojump/autojump.txt
+fi
 
 export TERM=screen-256color-bce
 tmux new-session -s docker-main
