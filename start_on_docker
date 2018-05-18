@@ -230,3 +230,9 @@ fi
 
 export TERM=screen-256color-bce
 tmux new-session -s docker-main
+
+if [ -f /home/lakshman/host/setup_docker_private_stuff.sh ] ; then
+    /home/lakshman/host/bin/setup_docker_private_stuff.sh
+else
+    echo "No /home/lakshman/host/setup_docker_private_stuff.sh available.."
+fi

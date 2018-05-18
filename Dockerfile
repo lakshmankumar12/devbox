@@ -166,7 +166,7 @@ RUN mkdir /home/lakshman/software && \
 
 #Any new lakshman installs here
 RUN pip2 install --user neovim beautifulsoup4 scipy matplotlib lxml selenium pylyrics lyricwikia
-RUN pip3 install --user neovim beautifulsoup4 scipy matplotlib lxml selenium pylyrics lyricwikia
+RUN pip3 install --user neovim beautifulsoup4 scipy matplotlib lxml selenium pylyrics lyricwikia lyricsgenius
 RUN pip3 install --user ipython
 RUN ln -s /home/lakshman/.local/bin/ipython3 /home/lakshman/bin/
 
