@@ -1,19 +1,30 @@
-: 1514574916:0;cd ~/host/Downloads
 : 1514429074:0;cd ~/host/github/quick-utility-scripts
+: 1514574916:0;cd ~/host/Downloads
 : 1514429074:0;cd ~/host/Downloads/songs-download
+: 1514429074:0;cd ~/host/Downloads/songs-download/English
 : 1514492208:0;ipython3
-: 1514593390:0;ping docker.for.mac.localhost
+: 1514593390:0;ping $(cat /home/lakshman/.myhostip)
 : 1514593944:0;tmuxatt doc
 : 1514593944:0;cd ~/host/Dropbox/just-for-sake-of-sharing-second/finance/payslips/aryaka-payslips
+: 1514593944:0;cd /home/lakshman/host/gitlab/office-api-try/python3-connect-rest-sample/
 : 1514593944:0;cd /home/lakshman/host/Google Drive/bills/t-mobile-bills
 : 1514593944:0;\ls ../aryaka-2017-{09,10,11,12}-* | tr '\n' '\0' | xargs -0 -I 'filename' sh -c 'a=filename ; pdftotext -layout filename $(echo ${a%.*} | cut -c4- ).txt '
 : 1514593944:0;cd /home/lakshman/host/gitlab/aryaka-vpn
 : 1514593944:0;export DISPLAY=192.168.1.133:0
 : 1514593944:0;export DISPLAY=172.16.17.98:0
 : 1514593944:0;sudo ip route add 192.168.1.133/24 via 10.71.81.1 dev eth0
-: 1514593944:0;mosh lakshman_narayanan@mforge2
-: 1514593944:0;ssh lakshman_narayanan@mforge2
+: 1514593944:0;mosh lakshman_narayanan@mforge3.corp.aryaka.com
+: 1514593944:0;ssh lakshman_narayanan@mforge3.corp.aryaka.com
+: 1514593944:0;ping lakshman_narayanan@mforge3.corp.aryaka.com
 : 1514593944:0;~/host/github/quick-utility-scripts/prettify_html.py a.html b.html
 : 1514593944:0;~/host/github/quick-utility-scripts/pretty_json.py a.json > b.json
-: 1514593944:0;export DISPLAY=docker.for.mac.localhost:0
-: 1514593944:0;ssh lakshman.narayanan@docker.for.mac.localhost wap
+: 1514593944:0;export DISPLAY=$(cat /home/lakshman/.myhostip):0
+: 1514593944:0;ssh lakshman.narayanan@$(cat /home/lakshman/.myhostip) wap
+: 1514593944:0;ssh lakshman.narayanan@$(cat /home/lakshman/.myhostip) /Users/lakshman.narayanan/github/mac_scripts/thumbs_up_any.applescript
+: 1514593944:0;ssh lakshman.narayanan@$(cat /home/lakshman/.myhostip) /Users/lakshman.narayanan/github/mac_scripts/next_song_any.py
+: 1514593944:0;ssh lakshman.narayanan@$(cat /home/lakshman/.myhostip) scrobbleUpdate
+: 1514593944:0;ssh -nNT -L 9000:localhost:22 lakshman.narayanan@$(cat /home/lakshman/.myhostip) &
+: 1514593944:0;ssh -nNT -R 9222:localhost:9000 lakshman_narayanan@mforge3.corp.aryaka.com &
+: 1514593944:0;ping docker.for.mac.localhost
+: 1514593944:0;sudo ip route add 192.168.65.2/32 via 10.71.81.1 dev eth0 src $(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
+

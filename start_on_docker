@@ -172,7 +172,19 @@ index b88e1a4..76447a9 100644
    let g:airline#themes#solarized#palette.tabline.airline_tab = [
 EOF
 
+cd /etc/ssh
+sudo patch -p3 <<'EOF'
+--- /etc/ssh/sshd_config        2018-08-30 21:53:16.000000000 -0700
++++ Downloads/sshd_config       2018-10-03 18:26:03.000000000 -0700
+@@ -63,6 +63,7 @@
 
+ X11Forwarding yes
+ X11DisplayOffset 10
++X11UseLocalhost no
+ PrintMotd no
+ PrintLastLog yes
+ TCPKeepAlive yes
+EOF
 
 cd /home/lakshman/github/zsh-git-prompt
 git pull

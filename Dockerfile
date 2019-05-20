@@ -17,8 +17,8 @@ RUN apt-get update && apt-get install -y \
             build-essential \
             libreadline6 \
             libreadline6-dev \
-            python python-pip python-mutagen \
-            python3 python3-pip python3-mutagen \
+            python \
+            python3 \
             ppp  \
             openssh-server \
             psmisc \
@@ -55,6 +55,8 @@ RUN apt-get update && apt-get install -y \
             pandoc \
             clang libclang-dev libssl-dev zlib1g-dev asciinema python-software-properties teseq \
             deluge
+
+RUN curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py && python /tmp/get-pip.py && python3 /tmp/get-pip.py
 
 RUN add-apt-repository ppa:neovim-ppa/stable -y
 RUN apt-get update
@@ -136,11 +138,9 @@ ENV TZ=America/Los_Angeles
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 #Any new root installs here
-RUN sudo -H pip2 install --upgrade pip
-RUN sudo -H pip3 install --upgrade pip
 RUN apt-get update
 RUN apt-get update
-RUN apt-get install -y python-tk python3-tk w3m qpdf
+RUN apt-get install -y python-tk python3-tk w3m qpdf python-dev python3-dev
 #Root install ..over..
 
 RUN chown -R lakshman:lakshman /home/lakshman
@@ -165,8 +165,8 @@ RUN mkdir /home/lakshman/software && \
 
 
 #Any new lakshman installs here
-RUN pip2 install --user neovim beautifulsoup4 scipy matplotlib lxml selenium pylyrics lyricwikia
-RUN pip3 install --user neovim beautifulsoup4 scipy matplotlib lxml selenium pylyrics lyricwikia lyricsgenius
+RUN pip2 install --user neovim beautifulsoup4 scipy matplotlib lxml selenium pylyrics lyricwikia mutagen pexpect
+RUN pip3 install --user neovim beautifulsoup4 scipy matplotlib lxml selenium pylyrics lyricwikia mutagen pexpect
 RUN pip3 install --user ipython
 RUN ln -s /home/lakshman/.local/bin/ipython3 /home/lakshman/bin/
 
