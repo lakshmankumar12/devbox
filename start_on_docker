@@ -16,15 +16,6 @@ diff --git a/themes/agnoster.zsh-theme b/themes/agnoster.zsh-theme
 index 07546fd..36abd99 100644
 --- a/themes/agnoster.zsh-theme
 +++ b/themes/agnoster.zsh-theme
-@@ -80,7 +80,7 @@ prompt_end() {
- # Context: user@hostname (who am I and where am I)
- prompt_context() {
-   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
--    prompt_segment black default "%(!.%{%F{yellow}%}.)$USER@%m"
-+    prompt_segment black default "%(!.%{%F{yellow}%}.)%m"
-   fi
- }
- 
 @@ -118,12 +118,12 @@ prompt_git() {
      zstyle ':vcs_info:*' enable git
      zstyle ':vcs_info:*' get-revision true
@@ -46,18 +37,52 @@ EOF
 cd /home/lakshman/github/dotfiles
 git pull
 patch -p1 <<EOF
-diff --git a/tmux.conf b/tmux.conf
-index 500543b..6bb4765 100644
 --- a/tmux.conf
 +++ b/tmux.conf
-@@ -103,6 +103,7 @@ set-option -g status on
+@@ -37,14 +37,15 @@ bind-key R run "bash -ci gotoJiraList"
+ set-window-option -g mode-keys vi
+
+ # start and end selection
+-bind-key -t vi-copy 'v' begin-selection
+-bind-key -t vi-copy 'y' copy-selection
+-bind-key -t vi-copy 'C-v' rectangle-toggle
+-bind-key -t vi-copy 'Escape' cancel
+-bind-key -t vi-copy 'a' cancel
++bind-key -Tcopy-mode-vi 'v'      send -X begin-selection
++bind-key -Tcopy-mode-vi 'y'      send -X copy-selection
++bind-key -Tcopy-mode-vi 'C-v'    send -X rectangle-toggle
++bind-key -Tcopy-mode-vi 'Escape' send -X cancel
++bind-key -Tcopy-mode-vi 'a'      send -X cancel
++
+
+ #bind a special attach (s is the regular attach) which will detach other clients
+-bind-key g choose-tree -b "attach-session -dt '%%'"
++bind-key g choose-tree -N "attach-session -dt '%%'"
+
+ #history
+ set-option -g history-limit 100000
+@@ -125,9 +126,9 @@ unbind-key t
+ bind-key t run "bash -ci ftpane"
+
+ unbind-key w
+-bind-key w choose-tree -u
++bind-key w choose-tree -N
+ unbind-key s
+-bind-key s choose-tree -u
++bind-key s choose-tree -N
+
+ unbind-key W
+ bind-key W choose-window
+@@ -163,8 +164,8 @@ set-option -g pane-active-border-fg brightgreen #base01
+
+ set-option -g status on
  set-option -g status-interval 2
- set-option -g status-utf8 on
+-set-option -g status-utf8 on
  set-option -g status-justify "centre"
 +set-option -g status-bg colour140
  set-option -g status-left-length 60
  set-option -g status-right-length 90
- set-option -g status-left  "#(~/software/tmux-powerline/powerline.sh left)"
+ set-option -g status-left  ""
 EOF
 
 cd /home/lakshman/github/vimfiles
@@ -174,16 +199,17 @@ EOF
 
 cd /etc/ssh
 sudo patch -p3 <<'EOF'
---- /etc/ssh/sshd_config        2018-08-30 21:53:16.000000000 -0700
-+++ Downloads/sshd_config       2018-10-03 18:26:03.000000000 -0700
-@@ -63,6 +63,7 @@
-
+--- /etc/ssh/sshd_config	2019-08-10 12:34:10.000000000 -0700
++++ /home/lakshman/sshd_config	2019-08-10 13:36:40.200538000 -0700
+@@ -88,7 +88,7 @@
+ #GatewayPorts no
  X11Forwarding yes
- X11DisplayOffset 10
-+X11UseLocalhost no
+ #X11DisplayOffset 10
+-#X11UseLocalhost yes
++X11UseLocalhost yes
+ #PermitTTY yes
  PrintMotd no
- PrintLastLog yes
- TCPKeepAlive yes
+ #PrintLastLog yes
 EOF
 
 cd /home/lakshman/github/zsh-git-prompt

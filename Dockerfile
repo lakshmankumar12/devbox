@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:bionic
 MAINTAINER Lakshman Kumar <lakshmankumar@gmail.com>
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -15,8 +15,8 @@ RUN apt-get update && apt-get install -y \
             pkg-config \
             cmake \
             build-essential \
-            libreadline6 \
-            libreadline6-dev \
+            libreadline7 \
+            libreadline-dev \
             python \
             python3 \
             ppp  \
@@ -28,8 +28,7 @@ RUN apt-get update && apt-get install -y \
             man \
             ghostscript \
             imagemagick \
-            pdftk \
-            libav-tools \
+            ffmpeg \
             id3v2 \
             unzip \
             zsh \
@@ -53,8 +52,10 @@ RUN apt-get update && apt-get install -y \
             ruby-dev \
             dbus-x11 \
             pandoc \
-            clang libclang-dev libssl-dev zlib1g-dev asciinema python-software-properties teseq \
+            clang libclang-dev libssl-dev zlib1g-dev asciinema teseq \
             deluge
+
+RUN apt-get install -y python3-distutils
 
 RUN curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py && python /tmp/get-pip.py && python3 /tmp/get-pip.py
 
@@ -117,7 +118,7 @@ RUN git clone --depth 1 https://github.com/lakshmankumar12/vimfiles /home/lakshm
        git clone --depth 1 https://github.com/lakshmankumar12/zsh-git-prompt.git /home/lakshman/github/zsh-git-prompt && \
        git clone --depth 1 https://github.com/lakshmankumar12/dotfiles /home/lakshman/github/dotfiles && \
        bash -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" && \
-       bash -c "cd /home/lakshman/.oh-my-zsh && patch -p1 -i <(curl 'https://gist.githubusercontent.com/lakshmankumar12/5d6abf8a93cc9afcbffe98cb38e362be/raw/74cafc1c1571fbd6639098d99a48d3d28de73404/agnoster.patch')" && \
+       bash -c "cd /home/lakshman/.oh-my-zsh && patch -p1 -i <(curl 'https://gist.githubusercontent.com/lakshmankumar12/5d6abf8a93cc9afcbffe98cb38e362be/raw/9c2216bc5a53814c8e610774ef9d849893ad6c3c/agnoster.patch')" && \
        echo "comment to be edited, if u want to github get ur repo again on its change - blah blah"
 
 RUN mkdir -p /home/lakshman/.vim/plugin && \
@@ -141,6 +142,21 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update
 RUN apt-get update
 RUN apt-get install -y python-tk python3-tk w3m qpdf python-dev python3-dev
+
+#pdftk is from previous ubuntu version
+RUN wget http://launchpadlibrarian.net/340410966/libgcj17_6.4.0-8ubuntu1_amd64.deb \
+         http://launchpadlibrarian.net/337429932/libgcj-common_6.4-3ubuntu1_all.deb \
+         https://launchpad.net/ubuntu/+source/pdftk/2.02-4build1/+build/10581759/+files/pdftk_2.02-4build1_amd64.deb \
+         https://launchpad.net/ubuntu/+source/pdftk/2.02-4build1/+build/10581759/+files/pdftk-dbg_2.02-4build1_amd64.deb && \
+    apt-get install -y ./libgcj17_6.4.0-8ubuntu1_amd64.deb \
+        ./libgcj-common_6.4-3ubuntu1_all.deb \
+        ./pdftk_2.02-4build1_amd64.deb \
+        ./pdftk-dbg_2.02-4build1_amd64.deb && \
+    rm ./libgcj17_6.4.0-8ubuntu1_amd64.deb && \
+    rm ./libgcj-common_6.4-3ubuntu1_all.deb && \
+    rm ./pdftk_2.02-4build1_amd64.deb && \
+    rm ./pdftk-dbg_2.02-4build1_amd64.deb
+
 #Root install ..over..
 
 RUN chown -R lakshman:lakshman /home/lakshman
