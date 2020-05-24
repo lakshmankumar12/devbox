@@ -27,4 +27,5 @@
 : 1514593944:0;ssh -nNT -R 9222:localhost:9000 lakshman_narayanan@mforge3.corp.aryaka.com &
 : 1514593944:0;ping docker.for.mac.localhost
 : 1514593944:0;sudo ip route add 192.168.65.2/32 via 10.71.81.1 dev eth0 src $(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
+: 1514593944:0;qpdf --password=sekritPassword --decrypt protected.pdf unprotected.pdf
 

@@ -1,0 +1,13 @@
+libreadline7 updated to libreadline8
+    * https://askubuntu.com/questions/1236377/unable-to-reinstall-missing-package-after-update-to-20-04
+
+get-pip is only for python2.7.
+
+all of neovim, nodejs and python3-neovim are just apt-get installs
+    * not sure if python-neovim is needed
+
+Get this error on pip install
+
+install pexpect eyeD3 pathlib gmusicapi grako flask_oauthlib flask_scrip
+    ERROR: requests-oauthlib 1.3.0 has requirement oauthlib>=3.0.0, but you'll have oauthlib 2.1.0 which is incompatible
+    -- Ignoring this.

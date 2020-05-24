@@ -7,196 +7,19 @@ export PATH=$PATH:~/host/bin
 sudo /bin/true
 
 cd .oh-my-zsh
-git checkout -- .
-rm -f $(git newfiles)
 git pull
 
-patch -p1 <<'EOF'
-diff --git a/themes/agnoster.zsh-theme b/themes/agnoster.zsh-theme
-index 07546fd..36abd99 100644
---- a/themes/agnoster.zsh-theme
-+++ b/themes/agnoster.zsh-theme
-@@ -118,12 +118,12 @@ prompt_git() {
-     zstyle ':vcs_info:*' enable git
-     zstyle ':vcs_info:*' get-revision true
-     zstyle ':vcs_info:*' check-for-changes true
--    zstyle ':vcs_info:*' stagedstr '✚'
--    zstyle ':vcs_info:*' unstagedstr '●'
-+    zstyle ':vcs_info:*' stagedstr ' '
-+    zstyle ':vcs_info:*' unstagedstr ' '
-     zstyle ':vcs_info:*' formats ' %u%c'
-     zstyle ':vcs_info:*' actionformats ' %u%c'
-     vcs_info
--    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
-+    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }$(git_super_status)${mode}"
-   fi
- }
- 
-EOF
-
-cd /home/lakshman/github/dotfiles
-git pull
-patch -p1 <<EOF
---- a/tmux.conf
-+++ b/tmux.conf
-@@ -37,14 +37,15 @@ bind-key R run "bash -ci gotoJiraList"
- set-window-option -g mode-keys vi
-
- # start and end selection
--bind-key -t vi-copy 'v' begin-selection
--bind-key -t vi-copy 'y' copy-selection
--bind-key -t vi-copy 'C-v' rectangle-toggle
--bind-key -t vi-copy 'Escape' cancel
--bind-key -t vi-copy 'a' cancel
-+bind-key -Tcopy-mode-vi 'v'      send -X begin-selection
-+bind-key -Tcopy-mode-vi 'y'      send -X copy-selection
-+bind-key -Tcopy-mode-vi 'C-v'    send -X rectangle-toggle
-+bind-key -Tcopy-mode-vi 'Escape' send -X cancel
-+bind-key -Tcopy-mode-vi 'a'      send -X cancel
-+
-
- #bind a special attach (s is the regular attach) which will detach other clients
--bind-key g choose-tree -b "attach-session -dt '%%'"
-+bind-key g choose-tree -N "attach-session -dt '%%'"
-
- #history
- set-option -g history-limit 100000
-@@ -125,9 +126,9 @@ unbind-key t
- bind-key t run "bash -ci ftpane"
-
- unbind-key w
--bind-key w choose-tree -u
-+bind-key w choose-tree -N
- unbind-key s
--bind-key s choose-tree -u
-+bind-key s choose-tree -N
-
- unbind-key W
- bind-key W choose-window
-@@ -163,8 +164,8 @@ set-option -g pane-active-border-fg brightgreen #base01
-
- set-option -g status on
- set-option -g status-interval 2
--set-option -g status-utf8 on
- set-option -g status-justify "centre"
-+set-option -g status-bg colour140
- set-option -g status-left-length 60
- set-option -g status-right-length 90
- set-option -g status-left  ""
-EOF
-
+echo -n "Update vimfiles to latest .."
 cd /home/lakshman/github/vimfiles
 git pull
+echo "done"
 
+echo -n "Installing autojump .."
 cd /home/lakshman/software/autojump && ./install.py
 cd /home/lakshman
+echo "done"
 
-patch -p1 <<'EOF'
-diff --git a/zshrc b/zshrc
-index 5219865..3c1ab75 100644
---- a/.zshrc
-+++ b/.zshrc
-@@ -7,7 +7,10 @@
- # Set name of the theme to load. Optionally, if you set this to "random"
- # it'll load a random theme each time that oh-my-zsh is loaded.
- # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
--ZSH_THEME="agnoster"
-+#ZSH_THEME="agnoster"
-+ZSH_THEME="powerlevel9k/powerlevel9k"
-+export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-+export POWERLEVEL9K_MODE=nerdfont-complete
-
- # Uncomment the following line to use case-sensitive completion.
- # CASE_SENSITIVE="true"
-EOF
-
-git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
-cd ~/.oh-my-zsh/custom/themes/powerlevel9k
-patch -p1 <<'EOF'
-diff --git a/functions/vcs.zsh b/functions/vcs.zsh
-index c3e507b..757ab23 100644
---- a/functions/vcs.zsh
-+++ b/functions/vcs.zsh
-@@ -7,6 +7,10 @@
- ################################################################
- 
- set_default POWERLEVEL9K_VCS_SHOW_SUBMODULE_DIRTY true
-+function +vi-git-replacement() {
-+    hook_com[misc]+=" $(git_super_status)"
-+}
-+
- function +vi-git-untracked() {
-     # TODO: check git >= 1.7.2 - see function git_compare_version()
-     local FLAGS
-diff --git a/powerlevel9k.zsh-theme b/powerlevel9k.zsh-theme
-index 26ab9cd..50aeadd 100755
---- a/powerlevel9k.zsh-theme
-+++ b/powerlevel9k.zsh-theme
-@@ -1134,10 +1134,10 @@ powerlevel9k_vcs_init() {
- 
-   zstyle ':vcs_info:*' actionformats "%b %F{${POWERLEVEL9K_VCS_ACTIONFORMAT_FOREGROUND}}| %a%f"
- 
--  zstyle ':vcs_info:*' stagedstr " $(print_icon 'VCS_STAGED_ICON')"
--  zstyle ':vcs_info:*' unstagedstr " $(print_icon 'VCS_UNSTAGED_ICON')"
-+  zstyle ':vcs_info:*' stagedstr " "
-+  zstyle ':vcs_info:*' unstagedstr " "
- 
--  defined POWERLEVEL9K_VCS_GIT_HOOKS || POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-untracked git-aheadbehind git-stash git-remotebranch git-tagname)
-+  defined POWERLEVEL9K_VCS_GIT_HOOKS || POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-replacement)
-   zstyle ':vcs_info:git*+set-message:*' hooks $POWERLEVEL9K_VCS_GIT_HOOKS
-   defined POWERLEVEL9K_VCS_HG_HOOKS || POWERLEVEL9K_VCS_HG_HOOKS=(vcs-detect-changes)
-   zstyle ':vcs_info:hg*+set-message:*' hooks $POWERLEVEL9K_VCS_HG_HOOKS
-EOF
-
-cd /home/lakshman/github/vimfiles
-patch -p1 <<'EOF'
-diff --git a/vimrc b/vimrc
-index 7d3c42d..777001f 100755
---- a/vimrc
-+++ b/vimrc
-@@ -378,8 +378,8 @@ if s:uname == "Darwin"
-     let g:deoplete#sources#clang#libclang_path='/usr/local/opt/llvm/lib/libclang.dylib'
-     let g:deoplete#sources#clang#clang_header='/usr/local/opt/llvm/include'
- else
--    let g:deoplete#sources#clang#libclang_path=g:my_home . '/install/clang/local/lib.hide/libclang.so.3.6'
--    let g:deoplete#sources#clang#clang_header=g:my_home . '/install/clang/local/include/clang'
-+    let g:deoplete#sources#clang#libclang_path='/usr/lib/llvm-3.8/lib/libclang.so'
-+    let g:deoplete#sources#clang#clang_header='/usr/lib/llvm-3.8/include'
- endif
- let g:deoplete#sources#jedi#python_path=g:my_home . '/bin/python3'
- let g:echodoc#enable_at_startup = 1
-EOF
-
-cd /home/lakshman/.vim/bundle/vim-airline-themes
-patch -p1 <<'EOF'
-diff --git a/autoload/airline/themes/solarized.vim b/autoload/airline/themes/solarized.vim
-index b88e1a4..76447a9 100644
---- a/autoload/airline/themes/solarized.vim
-+++ b/autoload/airline/themes/solarized.vim
-@@ -194,6 +194,21 @@ function! airline#themes#solarized#refresh()
-   let g:airline#themes#solarized#palette.replace_modified.airline_warning =
-         \ g:airline#themes#solarized#palette.normal.airline_warning
-
-+  let g:airline#themes#solarized#palette.terminal = airline#themes#generate_color_map(
-+        \ [s:R1[0].g, s:R1[1].g, s:R1[0].t, s:R1[1].t, s:R1[2]],
-+        \ [s:R2[0].g, s:R2[1].g, s:R2[0].t, s:R2[1].t, s:R2[2]],
-+        \ [s:R3[0].g, s:R3[1].g, s:R3[0].t, s:R3[1].t, s:R3[2]])
-+
-+  let g:airline#themes#solarized#palette.terminal.airline_warning =
-+        \ g:airline#themes#solarized#palette.normal.airline_warning
-+
-+  let g:airline#themes#solarized#palette.terminal = {
-+        \ 'airline_c': [s:RM[0].g, s:RM[1].g,
-+        \ s:RM[0].t, s:RM[1].t, s:RM[2]]}
-+
-+  let g:airline#themes#solarized#palette.terminal.airline_warning =
-+        \ g:airline#themes#solarized#palette.normal.airline_warning
-+
-   let g:airline#themes#solarized#palette.tabline = {}
-
-   let g:airline#themes#solarized#palette.tabline.airline_tab = [
-EOF
-
+echo -n "Patching ssh to use x11localhost .."
 cd /etc/ssh
 sudo patch -p3 <<'EOF'
 --- /etc/ssh/sshd_config	2019-08-10 12:34:10.000000000 -0700
@@ -211,27 +34,36 @@ sudo patch -p3 <<'EOF'
  PrintMotd no
  #PrintLastLog yes
 EOF
+echo "done"
 
+echo "Updating zsh-git-prompt .."
 cd /home/lakshman/github/zsh-git-prompt
 git pull
+echo "done"
 
 cd ../..
 
 
+echo -n "Setting softlinks ot match mac host .."
 sudo mkdir /Users
 sudo chown lakshman:lakshman /Users
-ln -s /var/shared /Users/lakshman.narayanan
+ln -s /var/shared /Users/lakshman_narayanan
 ln -s /home/lakshman/host/gitlab /home/lakshman/gitlab
 ln -s /home/lakshman/host/src /home/lakshman/src
 ln -s /home/lakshman/github/dotfiles/bashrc.devbox /home/lakshman/.bashrc.devbox
+echo "done"
 
+echo "Starting sshd .."
 sudo /etc/init.d/ssh start
+echo "done"
 
+echo "Setting up ssh keys .."
 mkdir /home/lakshman/.ssh
 chmod 700 /home/lakshman/.ssh
 cp /home/lakshman/host/.ssh/id_rsa* /home/lakshman/.ssh/
 cp /home/lakshman/host/.ssh/authorized_keys /home/lakshman/.ssh/
 chmod 600 /home/lakshman/.ssh/authorized_keys
+echo "done"
 
 mkdir /home/lakshman/forge_home
 #sshfs lakshman_narayanan@mforge1:/home/lakshman_narayanan /home/lakshman/forge_home
@@ -262,15 +94,28 @@ cd /home/lakshman
 hn=$(hostname)
 
 if [ "$hn" == "DevBox" ] ; then
-    vi -c 'PluginInstall' -c 'qa!'
+    nvim -c 'PluginInstall' -c 'qa!'
+    mkdir -p /home/lakshman/.local/share/autojump/
     cp /home/lakshman/host/github/devbox/autojump.txt /home/lakshman/.local/share/autojump/autojump.txt
 fi
 
+echo -n "Patching powerlevel-9k .."
+cd /home/lakshman/.oh-my-zsh/custom/themes/powerlevel9k
+wget 'https://gist.githubusercontent.com/lakshmankumar12/2cb328d1025a93d444426eacd320d961/raw/9425d04ea436bc7177ecf7940045b5a287a863ee/powerlevel9k-diff.patch'
+patch -p1 -i powerlevel9k-diff.patch
+echo "Done"
+
+cd
+
 export TERM=screen-256color-bce
-tmux new-session -s docker-main
+tmux new-session -d -s docker-main
+
+tmux set-option -g status-bg colour133
 
 if [ -f /home/lakshman/host/setup_docker_private_stuff.sh ] ; then
     /home/lakshman/host/bin/setup_docker_private_stuff.sh
 else
     echo "No /home/lakshman/host/setup_docker_private_stuff.sh available.."
 fi
+
+tmux attach-session -t docker-main
