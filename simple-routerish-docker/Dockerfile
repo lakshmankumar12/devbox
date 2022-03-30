@@ -1,35 +1,35 @@
-FROM phusion/baseimage:0.9.22
+FROM phusion/baseimage:focal-1.2.0
 MAINTAINER Lakshman Kumar <lakshmankumar@gmail.com>
-
-ENV DEBIAN_FRONTEND=noninteractive
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
 
 # Install dev tools
-RUN apt-get update
+RUN apt-get update && \
+        apt-get install -y \
+            iproute2 \
+            iputils-ping \
+            iptables \
+            net-tools \
+            bridge-utils \
+            conntrack \
+            ethtool \
+            tcpdump \
+            screen \
+            strongswan \
+            strongswan-swanctl \
+            python3 \
+            python3-pip && \
+        pip install --pre scapy[basic] && \
+        mkdir /var/shared/ && \
+        touch /var/shared/placeholder
 
-RUN apt-get install -y \
-        iproute2 \
-        iputils-ping \
-        iptables \
-        tcpdump \
-        python \
-        curl \
-        screen \
-        openssh-server \
-        python-pip
-
-RUN echo "root:rPasswd!" | chpasswd; \
-        sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config; \
-        sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd; \
-        echo "export VISIBLE=now" >> /etc/profile;
-
-RUN apt-get install ethtool 
-
-RUN mkdir /var/shared/ && \
-    touch /var/shared/placeholder
+ADD screenrc /.screenrc
 
 VOLUME /var/shared
 
-CMD ["/bin/bash"]
+## Not cleaning.. we want to continue installing in container
+#RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+## Fire this container
+##   docker run --rm -v $HOME:/var/shared -t -i lakshmankumar/simple-routerish-docker /sbin/my_init -- bash -l
